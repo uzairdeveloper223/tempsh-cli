@@ -14,12 +14,6 @@ or with pip:
 pip install git+https://github.com/uzairdeveloper223/tempsh-cli
 ```
 
-for progress bar support:
-
-```bash
-pipx install git+https://github.com/uzairdeveloper223/tempsh-cli[progress]
-```
-
 ## usage
 
 ```bash

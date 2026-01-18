@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tempsh-cli"
-version = "1.0.1"
+version = "1.0.2"
 description = "temporary file upload cli tool"
 readme = "README.md"
 license = {text = "GPL-3.0"}
@@ -14,6 +14,7 @@ authors = [
 requires-python = ">=3.7"
 dependencies = [
     "requests>=2.25.0",
+    "requests-toolbelt>=0.9.0",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -27,9 +28,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-
-[project.optional-dependencies]
-progress = ["requests-toolbelt>=0.9.0"]
 
 [project.scripts]
 tempsh-cli = "tempsh_cli:main"

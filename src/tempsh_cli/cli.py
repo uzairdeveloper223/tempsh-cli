@@ -6,7 +6,7 @@ import requests
 from pathlib import Path
 import time
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 UPLOAD_URL = "https://temp.sh/upload"
 
 def format_size(bytes):
@@ -63,33 +63,22 @@ def upload_file(filepath):
     filename = Path(filepath).name
     print(f"uploading {filename} ({format_size(file_size)})...")
     
-    try:
-        from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
-        has_toolbelt = True
-    except ImportError:
-        has_toolbelt = False
+    from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
     
     try:
-        if has_toolbelt:
-            progress = UploadProgress(file_size)
-            with open(filepath, 'rb') as f:
-                encoder = MultipartEncoder(fields={'file': (filename, f, 'application/octet-stream')})
-                monitor = MultipartEncoderMonitor(encoder, lambda m: progress.update(m.bytes_read - progress.uploaded))
-                
-                response = requests.post(
-                    UPLOAD_URL,
-                    data=monitor,
-                    headers={'Content-Type': monitor.content_type},
-                    timeout=300
-                )
-            print()
-        else:
-            print("note: install requests-toolbelt for progress bar")
-            print("  pip install requests-toolbelt")
-            with open(filepath, 'rb') as f:
-                files = {'file': (filename, f)}
-                response = requests.post(UPLOAD_URL, files=files, timeout=300)
+        progress = UploadProgress(file_size)
+        with open(filepath, 'rb') as f:
+            encoder = MultipartEncoder(fields={'file': (filename, f, 'application/octet-stream')})
+            monitor = MultipartEncoderMonitor(encoder, lambda m: progress.update(m.bytes_read - progress.uploaded))
+            
+            response = requests.post(
+                UPLOAD_URL,
+                data=monitor,
+                headers={'Content-Type': monitor.content_type},
+                timeout=300
+            )
         
+        print()
         if response.status_code == 200:
             url = response.text.strip()
             print(f"success!")
