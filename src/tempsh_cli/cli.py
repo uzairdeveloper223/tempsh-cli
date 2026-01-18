@@ -6,7 +6,7 @@ import requests
 from pathlib import Path
 import time
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 UPLOAD_URL = "https://temp.sh/upload"
 
 def format_size(bytes):
