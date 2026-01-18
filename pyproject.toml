@@ -32,12 +32,11 @@ classifiers = [
 progress = ["requests-toolbelt>=0.9.0"]
 
 [project.scripts]
-tempsh-cli = "tempsh-cli:main"
+tempsh-cli = "tempsh_cli:main"
 
 [project.urls]
 Homepage = "https://github.com/uzairdeveloper223/tempsh-cli"
 Repository = "https://github.com/uzairdeveloper223/tempsh-cli"
 
 [tool.hatch.build.targets.wheel]
-packages = ["."]
-only-include = ["tempsh-cli.py"]
+packages = ["src/tempsh_cli"]
