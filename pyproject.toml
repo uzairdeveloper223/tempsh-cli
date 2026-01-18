@@ -37,3 +37,7 @@ tempsh-cli = "tempsh-cli:main"
 [project.urls]
 Homepage = "https://github.com/uzairdeveloper223/tempsh-cli"
 Repository = "https://github.com/uzairdeveloper223/tempsh-cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["tempsh-cli.py"]
