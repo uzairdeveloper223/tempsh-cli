@@ -64,36 +64,31 @@ def upload_file(filepath):
     print(f"uploading {filename} ({format_size(file_size)})...")
     
     try:
-        progress = UploadProgress(file_size)
         from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
-        
-        with open(filepath, 'rb') as f:
-            encoder = MultipartEncoder(fields={'file': (filename, f, 'application/octet-stream')})
-            monitor = MultipartEncoderMonitor(encoder, lambda m: progress.update(m.bytes_read - progress.uploaded))
-            
-            response = requests.post(
-                UPLOAD_URL,
-                data=monitor,
-                headers={'Content-Type': monitor.content_type},
-                timeout=300
-            )
-        
-        print()
-        if response.status_code == 200:
-            url = response.text.strip()
-            print(f"success!")
-            print(f"url: {url}")
-            print(f"expires: 3 days")
-            return True
-        else:
-            print(f"error: upload failed (status {response.status_code})")
-            return False
+        has_toolbelt = True
     except ImportError:
-        print("note: install requests-toolbelt for progress bar")
-        print("  pip install requests-toolbelt")
-        with open(filepath, 'rb') as f:
-            files = {'file': (filename, f)}
-            response = requests.post(UPLOAD_URL, files=files, timeout=300)
+        has_toolbelt = False
+    
+    try:
+        if has_toolbelt:
+            progress = UploadProgress(file_size)
+            with open(filepath, 'rb') as f:
+                encoder = MultipartEncoder(fields={'file': (filename, f, 'application/octet-stream')})
+                monitor = MultipartEncoderMonitor(encoder, lambda m: progress.update(m.bytes_read - progress.uploaded))
+                
+                response = requests.post(
+                    UPLOAD_URL,
+                    data=monitor,
+                    headers={'Content-Type': monitor.content_type},
+                    timeout=300
+                )
+            print()
+        else:
+            print("note: install requests-toolbelt for progress bar")
+            print("  pip install requests-toolbelt")
+            with open(filepath, 'rb') as f:
+                files = {'file': (filename, f)}
+                response = requests.post(UPLOAD_URL, files=files, timeout=300)
         
         if response.status_code == 200:
             url = response.text.strip()
